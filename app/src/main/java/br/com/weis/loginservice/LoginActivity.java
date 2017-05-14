@@ -10,7 +10,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
-import java.util.StringTokenizer;
 
 public class LoginActivity extends AppCompatActivity {
 

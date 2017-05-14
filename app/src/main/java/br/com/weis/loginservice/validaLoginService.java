@@ -4,9 +4,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class validaLoginService extends Service {
     public validaLoginService() {    }
@@ -25,12 +31,22 @@ public class validaLoginService extends Service {
         int month = intent.getExtras().getInt("month");
         int year = intent.getExtras().getInt("year");
 
+        /**
+         * TODO Trying to verify selected date
+            Calendar currentDate = Calendar.getInstance();
+            Calendar selectedDate = Calendar.getInstance();
+            selectedDate.set(day, month, year);
+         */
+
         if (email.equalsIgnoreCase("ps@fiap.com.br") && password.equalsIgnoreCase("10")){
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-            notificationBuilder.setContentTitle("Validaçao Login");
-            notificationBuilder.setContentText("Login OK");
+            notificationBuilder.setContentTitle(getString(R.string.lblLoginVerification));
+            notificationBuilder.setContentText(getString(R.string.lblWarning));
+            notificationBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
+            Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            notificationBuilder.setSound(sound);
 
             notificationManager.notify(100, notificationBuilder.build());
 
@@ -38,7 +54,7 @@ public class validaLoginService extends Service {
                                                                                         PendingIntent.FLAG_UPDATE_CURRENT));
         }
         else {
-            Toast.makeText(this, "Login falhou", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.lblFailedLogin, Toast.LENGTH_SHORT).show();
         }
 
         return START_STICKY;
