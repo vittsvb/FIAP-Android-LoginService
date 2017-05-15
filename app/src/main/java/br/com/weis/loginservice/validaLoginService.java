@@ -33,7 +33,7 @@ public class validaLoginService extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 
-        if (email.equalsIgnoreCase("ps@fiap.com.br") && password.equalsIgnoreCase("10") && verifySelectedDate(year, month, day)){
+        if (email.trim().equalsIgnoreCase("ps@fiap.com.br") && password.equalsIgnoreCase("10") && verifySelectedDate(year, month, day)){
             notificationBuilder.setContentTitle(getString(R.string.lblLoginVerification));
             notificationBuilder.setContentText(getString(R.string.lblValidLogin));
             notificationBuilder.setSmallIcon(android.R.drawable.ic_dialog_info);
@@ -65,6 +65,6 @@ public class validaLoginService extends Service {
         selectedCalendar.set(year, month, day);
         Date selectedDate = selectedCalendar.getTime();
 
-        return selectedDate.before(currentDate) ? true : false;
+        return selectedDate.before(currentDate);
     }
 }
