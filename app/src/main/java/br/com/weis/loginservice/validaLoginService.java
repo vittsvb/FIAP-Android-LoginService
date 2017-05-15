@@ -13,14 +13,13 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
-
 public class validaLoginService extends Service {
+
     public validaLoginService() {    }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 
     @Override
@@ -31,32 +30,41 @@ public class validaLoginService extends Service {
         int month = intent.getExtras().getInt("month");
         int year = intent.getExtras().getInt("year");
 
-        /**
-         * TODO Trying to verify selected date
-            Calendar currentDate = Calendar.getInstance();
-            Calendar selectedDate = Calendar.getInstance();
-            selectedDate.set(day, month, year);
-         */
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 
-        if (email.equalsIgnoreCase("ps@fiap.com.br") && password.equalsIgnoreCase("10")){
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        if (email.equalsIgnoreCase("ps@fiap.com.br") && password.equalsIgnoreCase("10") && verifySelectedDate(year, month, day)){
             notificationBuilder.setContentTitle(getString(R.string.lblLoginVerification));
-            notificationBuilder.setContentText(getString(R.string.lblWarning));
+            notificationBuilder.setContentText(getString(R.string.lblValidLogin));
+            notificationBuilder.setSmallIcon(android.R.drawable.ic_dialog_info);
+            Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            notificationBuilder.setSound(sound);
+        }
+        else {
+            notificationBuilder.setContentTitle(getString(R.string.lblLoginVerification));
+            notificationBuilder.setContentText(getString(R.string.lblFailedLogin));
             notificationBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
             Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             notificationBuilder.setSound(sound);
-
-            notificationManager.notify(100, notificationBuilder.build());
-
-            notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, LoginActivity.class),
-                                                                                        PendingIntent.FLAG_UPDATE_CURRENT));
         }
-        else {
-            Toast.makeText(this, R.string.lblFailedLogin, Toast.LENGTH_SHORT).show();
-        }
+
+        notificationManager.notify(100, notificationBuilder.build());
+
+        notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, LoginActivity.class),
+                PendingIntent.FLAG_UPDATE_CURRENT));
 
         return START_STICKY;
+    }
+
+    private Boolean verifySelectedDate(int year, int month, int day){
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.add(Calendar.YEAR, -18);
+        Date currentDate = currentCalendar.getTime();
+
+        Calendar selectedCalendar = Calendar.getInstance();
+        selectedCalendar.set(year, month, day);
+        Date selectedDate = selectedCalendar.getTime();
+
+        return selectedDate.before(currentDate) ? true : false;
     }
 }

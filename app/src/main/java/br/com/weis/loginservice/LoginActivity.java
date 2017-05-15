@@ -16,10 +16,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtEmail;
     private EditText txtPassword;
     private DatePicker dpBirthdate;
-    private Calendar currentDate;
-    private int day;
-    private int month;
-    private int year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
