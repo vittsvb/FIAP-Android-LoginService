@@ -48,11 +48,11 @@ public class validaLoginService extends Service {
             notificationBuilder.setSound(sound);
         }
 
-        notificationManager.notify(100, notificationBuilder.build());
-
         notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, LoginActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT));
 
+        notificationManager.notify(100, notificationBuilder.build());
+        
         return START_STICKY;
     }
 
